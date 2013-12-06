@@ -1,0 +1,59 @@
+#!/bin/bash
+
+function minutes { echo "$(( 60 * $1 ))"; }
+function hours { echo "$(( 60 * $(minutes $1) ))"; }
+
+DATADIR="$(dirname "$(readlink -e "$0")")/data"
+mkdir -p "$DATADIR"
+INTERVAL="$(minutes 1)"
+FILE_NAME_FORMAT='+%Y-%m-%d_%A'
+RECORD_FORMAT='+%H:%M:%S'
+TARGET_TIME="$(hours 4)"
+
+file_name() { echo "$DATADIR/$(date "$FILE_NAME_FORMAT").txt"; }
+number_of_records() { tail -n +1 "$1" | wc -l ; }
+time_worked() { echo "$(( $INTERVAL * "$(number_of_records)"))"; }
+wish() { FILE="$(file_name)" ; [ -e "$FILE" ] && head -n 1 "$FILE"; }
+time_formated() { date "$RECORD_FORMAT"; }
+
+target_file()
+{
+  FILE="$(file_name)"
+  if [ ! -e "$FILE" ]; then
+    WISH=""
+    while [ -z "$WISH" ]; do
+      WISH="$(zenity  --text "Желание на сегодня:" --entry)"
+    done
+    echo "$WISH" >> "$FILE"
+  fi
+  echo "$FILE"
+}
+
+record()
+{
+  while true; do
+    sleep "$INTERVAL"
+    FILE="$(target_file)"
+    if zenity  --question --text "Работаешь?"; then
+      echo "${INTERVAL} $(time_formated)"  >> "$FILE"
+      notify-send "Умничка!:)"
+      # there is no need to log negative cases
+    fi
+  done
+}
+
+
+check_status()
+{
+  if [ -e "$(file_name)" ]; then
+    if [ $(time_worked) -lt "$TARGET_TIME" ]; then
+      echo "Ты всё на сегодня сделал! Можешь $(wish):)"
+    else
+      echo "Ещё нет. Поделай что-нибудь ещё."
+    fi
+  else
+    echo "Нет информации за сегодня."
+  fi
+}
+
+$@
