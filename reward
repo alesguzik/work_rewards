@@ -5,7 +5,7 @@ function hours { echo "$(( 60 * $(minutes $1) ))"; }
 
 DATADIR="$(dirname "$(readlink -e "$0")")/data"
 mkdir -p "$DATADIR"
-INTERVAL="$(minutes 1)"
+INTERVAL="$(minutes 5)"
 FILE_NAME_FORMAT='+%Y-%m-%d_%A'
 RECORD_FORMAT='+%H:%M:%S'
 TARGET_TIME="$(hours 4)"
