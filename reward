@@ -42,10 +42,10 @@ record()
 }
 
 
-check_status()
+status()
 {
   if [ -e "$(file_name)" ]; then
-    if [ $(time_worked) -lt "$TARGET_TIME" ]; then
+    if [ $(time_worked) -gt "$TARGET_TIME" ]; then
       echo "Ты всё на сегодня сделал! Можешь $(wish):)"
     else
       echo "Ещё нет. Поделай что-нибудь ещё."
