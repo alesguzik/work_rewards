@@ -11,7 +11,7 @@ RECORD_FORMAT='+%H:%M:%S'
 TARGET_TIME="$(hours 4)"
 
 file_name() { echo "$DATADIR/$(date "$FILE_NAME_FORMAT").txt"; }
-number_of_records() { tail -n +1 "$1" | wc -l ; }
+number_of_records() { tail -n +2 "$1" | wc -l ; }
 time_worked() { echo "$(( $INTERVAL * "$(number_of_records)"))"; }
 wish() { FILE="$(file_name)" ; [ -e "$FILE" ] && head -n 1 "$FILE"; }
 time_formated() { date "$RECORD_FORMAT"; }
