@@ -17,7 +17,7 @@ time_formated() { date "$RECORD_FORMAT"; }
 last_worked_at(){ tail -n 1 $(file_name) | awk '{print $2}'; }
 unix_seconds() { date --date "$1" '+%s'; }
 not_working(){ echo "$(( $(date '+%s') - $(unix_seconds "$(last_worked_at)") ))"; }
-to_minutes() { echo $(( $1 / 60.0 )) }
+to_minutes() { echo $(( $1 / 60.0 )); }
 
 target_file()
 {
