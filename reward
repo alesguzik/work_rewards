@@ -52,7 +52,11 @@ record()
 status()
 {
   if [ -e "$(file_name)" ]; then
-    echo "Можешь $(wish):)"
+    if [ $(time_worked) -gt "$TARGET_TIME" ]; then
+      echo "Ты всё на сегодня сделал! Можешь $(wish):)"
+    else
+      echo "Ещё нет. Поделай что-нибудь ещё."
+    fi
   else
     echo "Нет информации за сегодня."
   fi
